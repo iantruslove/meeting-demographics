@@ -7,6 +7,7 @@
   :source-paths ["src/clj"]
 
   :dependencies [[org.clojure/clojure "1.5.1"]
+                 [compojure "1.1.5"]
                  [ring "1.1.8"]
                  ;[ring/ring-json "0.2.0"]
                  [ring-middleware-format "0.3.0"]]
@@ -15,6 +16,4 @@
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]]}}
   
   :plugins [[lein-ring "0.8.5"]]
-
-;;  :ring {:handler ring-experiment.core/app}
   )
