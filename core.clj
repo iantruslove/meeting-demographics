@@ -1,4 +1,4 @@
-(ns ring-experiment.core
+(ns demographics.core
   (use compojure.core)
   (:require [ring.middleware.params :refer [wrap-params]]
                                         ;[ring.middleware.json :as json]

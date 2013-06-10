@@ -1,6 +1,6 @@
-(ns ring-experiment.core-test
+(ns demographics.core-test
   (:require [clojure.test :refer :all]
-            [ring-experiment.core :refer :all]))
+            [demographics.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

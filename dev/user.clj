@@ -2,7 +2,7 @@
   (:require [clojure.pprint :refer (pprint)]
             [clojure.repl :refer :all]
             [clojure.tools.namespace.repl :refer (refresh refresh-all)]
-            [ring-experiment.system :as system]))
+            [demographics.system :as system]))
 
 ;; The global Var to hold the whole system
 (def system nil)

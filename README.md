@@ -1,6 +1,6 @@
-# ring-experiment
+# Demographics
 
-A Clojure library designed to ... well, that part is up to you.
+A little web app to capture and record basic demographic data for meeting attendees.
 
 ## Usage
 

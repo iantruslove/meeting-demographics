@@ -1,12 +1,12 @@
-(ns ring-experiment.system
+(ns demographics.system
   (:use ring.adapter.jetty)
-  (:require ring-experiment.core)
+  (:require demographics.core)
   (:require cljs.closure))
 
 (defn system
   "Returns a new instance of the whole application"
   ([port]
-     (let [app #'ring-experiment.core/app
+     (let [app #'demographics.core/app
            webserver (run-jetty app {:port (Integer. port)
                                      :join? false })]
        (.stop webserver)
@@ -24,7 +24,7 @@
   system)
 
 (defn- compile-clojurescript [_]
-  (cljs.closure/build "src/cljs/ring_experiment/"
+  (cljs.closure/build "src/cljs/demographics/"
                       {:optimizations :whitespace
                        :pretty-print true
                        :output-dir "resources/public/js/files"

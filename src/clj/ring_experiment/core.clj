@@ -1,4 +1,4 @@
-(ns ring-experiment.core
+(ns demographics.core
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.handler :refer [site]]
             [compojure.route :refer [resources not-found]]))

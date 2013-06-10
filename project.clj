@@ -1,4 +1,4 @@
-(defproject ring-experiment "0.1.0-SNAPSHOT"
+(defproject demographics "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -15,6 +15,6 @@
 
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]]}}
-  
+
   :plugins [[lein-ring "0.8.5"]]
   )
