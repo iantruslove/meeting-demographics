@@ -10,7 +10,8 @@
                  [compojure "1.1.5"]
                  [ring "1.1.8"]
                  ;[ring/ring-json "0.2.0"]
-                 [ring-middleware-format "0.3.0"]]
+                 [ring-middleware-format "0.3.0"]
+                 [cljsbuild "0.3.2"]]
 
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]]}}
