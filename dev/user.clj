@@ -11,7 +11,7 @@
   "Constructs the current development system"
   []
   (alter-var-root #'system
-                  (constantly (system/system))
+                  (constantly (system/init))
                   ))
 
 (defn start
