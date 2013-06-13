@@ -1,5 +1,73 @@
-<html>
- <body>:)</body>
- <script src="./js/app.js"></script>
- <script>demographics.app.main()</script>
+<!DOCTYPE html>
+<!-- /ht Paul Irish - http://front.ie/j5OMXi -->
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Meeting Demographics Tracker</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- /ht Andy Clarke - http://front.ie/lkCwyf -->
+    <meta http-equiv="cleartype" content="on">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <link rel="shortcut icon" href="/link/to/favicon.ico">
+    <link rel="apple-touch-icon" href="/link/to/apple-touch-icon.png">
+
+    <!-- /ht Jeremy Keith - http://front.ie/mLXiaS -->
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="css/layout.css" media="all and (min-width: 33.236em)">
+    <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
+
+    <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="css/layout.css" media="all">
+        <![endif]-->
+
+    <script src="vendor/modernizr-1.7.min.js"></script>
+  </head>
+
+  <body>
+    
+    <div id="container" class="cf">
+      
+      <header>
+        <h1>some meeting</h1>
+      </header>
+      
+      <div id="main" role="main">
+        <div id="demographics-form">
+          <table>
+            <tr>
+              <th></th>
+              <th>male</th>
+              <th>female</th>
+            </tr>
+            <tr>
+              <th>frogs</th>
+              <td><button class="plus-one" data-primary-val="male"
+                          data-secondary-val="frog">+1 male frog [0]</button></td>
+              <td><button class="plus-one" data-primary-val="female"
+                          data-secondary-val="frog">+1 female frog [0]</button></td>
+            </tr>
+            <tr>
+              <th>toads</th>
+              <td><button class="plus-one" data-primary-val="male"
+                          data-secondary-val="toad">+1 male toad [0]</button></td>
+              <td><button class="plus-one" data-primary-val="female"
+                          data-secondary-val="toad">+1 female toad [0]</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <footer></footer>
+    </div>
+
+    <script src="./js/app.js"></script>
+    <script>demographics.app.init()</script>
+  </body>
 </html>

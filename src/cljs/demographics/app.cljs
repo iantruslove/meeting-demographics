@@ -1,4 +1,7 @@
-(ns demographics.app)
+(ns demographics.app
+  (:require [domina :refer [by-id]]
+            [demographics.views.collection-form :as form])
+  )
 
-(defn ^:export main []
-  (.write js/document "<p>Hello from cljs</p>"))
+(defn ^:export init []
+  (form/init (by-id "demographics-form")))

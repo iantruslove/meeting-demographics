@@ -12,6 +12,9 @@
                  ;[ring/ring-json "0.2.0"]
                  [ring-middleware-format "0.3.0"]
                  [cljsbuild "0.3.2"]]
+                 ;; CLJS:
+                 [cljsbuild "0.3.2"]
+                 [domina "1.0.2-SNAPSHOT"]]
 
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]]}}
