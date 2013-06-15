@@ -1,6 +1,8 @@
 (ns demographics.views.collection-form
   (:require [domina.css :refer [sel]]
-            [domina.events :refer [listen!]]))
+            [domina.events :refer [listen! unlisten!
+                                   ]]
+            [goog.net.XhrIo :as xhr]))
 
 (def last-event (atom nil))
 
@@ -26,8 +28,8 @@
 (defn submit-ajax-request
   [ev]
   (.send goog.net.XhrIo
-         "/meeting/"
-         handle-ajax-request
+         "/api/meeting"
+         handle-ajax-response
          "POST"
          (data-attrs ev)
          (clj->js {:Content-Type "application/json"}))

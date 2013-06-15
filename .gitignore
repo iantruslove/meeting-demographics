@@ -4,6 +4,7 @@
 /checkouts
 /out
 /resources/public/js/
+/.repl/
 pom.xml
 pom.xml.asc
 *.jar
@@ -12,3 +13,4 @@ pom.xml.asc
 .lein-failures
 .lein-plugins
 .lein-repl-history
+[#]*[#]
