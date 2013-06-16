@@ -16,6 +16,7 @@
   (swap! meeting-attendees add-participant gender type))
 
 (defroutes api-routes
+  (GET "/meeting" [] (resp/response @meeting-attendees))
   (POST "/meeting" []
         (fn [request]
           (let [gender (keyword (get-in request [:body :data-primary-val]))
