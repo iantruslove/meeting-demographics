@@ -4,7 +4,7 @@
             [compojure.handler :as handler]
             [compojure.route :refer [resources not-found]]
             [ring.util.response :as resp]
-            [ring.middleware.json]))
+            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]))
 
 (def meeting-attendees (atom {:male {:frog 0 :toad 0}
                               :female {:frog 0 :toad 0}}))
@@ -16,20 +16,16 @@
   (swap! meeting-attendees add-participant gender type))
 
 (defroutes api-routes
-  (POST "/meeting" [] (fn [request]
-
-                        (let [gender (keyword (get-in request
-                                                       [:body :data-primary-val]))
-                              type (keyword  (get-in request 
-                                                     [:body :data-secondary-val]))]
-                          (register-participant gender type))
-                        
-                        {:status 200
-                         :headers {"Content-type" "application/json"}
-                         :body (json/write-str @meeting-attendees)})))
+  (POST "/meeting" []
+        (fn [request]
+          (let [gender (keyword (get-in request [:body :data-primary-val]))
+                type (keyword (get-in request [:body :data-secondary-val]))]
+            (resp/response (register-participant gender type))))))
 
 (defroutes app-routes
-  (context "/api" [] (ring.middleware.json/wrap-json-body api-routes {:keywords? true}))
+  (context "/api" [] (-> api-routes
+                         (wrap-json-response)
+                         (wrap-json-body {:keywords? true})))
   (resources "/")
   (GET "/" [] (resp/resource-response "index.html" {:root "public"}))
   (not-found "<p>404 - page not found</p>\n"))
