@@ -1,16 +1,30 @@
 (ns demographics.views.collection-form
-  (:require [domina.css :refer [sel]]
-            [domina.events :refer [listen! unlisten!
-                                   ]]
-            [goog.net.XhrIo]))
+  (:require [domina :as dom]
+            [domina.css :as css]
+            [domina.events :as ev]
+            [goog.net.XhrIo :as xhr]))
 
-(def last-event (atom nil))
+(def initial-data {:male {:frog 0 :toad 0}
+                   :female {:frog 0 :toad 0}})
 
-(defn ^:export set-last-event! [ev]
-  (reset! last-event ev))
+(defn css-data-attr-selector [data-name val]
+  (str "[data-" (name data-name) "='" (name val) "']"))
 
-(defn ^:export get-last-event []
-  @last-event)
+(defn find-button [gender type]
+  (css/sel (str "button"
+                (css-data-attr-selector "primary-val" gender)
+                (css-data-attr-selector "secondary-val" type))))
+
+(defn label-button! [gender type current-count]
+  (dom/set-text! (find-button gender type) (str "+1 " (name gender) " " (name  type) " [" current-count "]")))
+
+(defn get-count-from [data gender type]
+  (get-in data [gender type]))
+
+(defn set-button-text! [data]
+  (doseq [[gender data-per-gender] data]
+    (doseq [[type number] data-per-gender]
+      (label-button! gender type number))))
 
 (defn data-attrs [ev]
   (-> ev
@@ -18,12 +32,11 @@
       (domina/attrs)
       (select-keys [:data-primary-val :data-secondary-val])
       (clj->js)
-      (js/JSON.stringify))
- )
+      (js/JSON.stringify)))
 
 (defn handle-ajax-response [response]
-  (js/console.log (clj->js response))
-  )
+  (let [data (js->clj (.getResponseJson (.-target response)))]
+    (set-button-text! data)))
 
 (defn submit-ajax-request
   [ev]
@@ -32,13 +45,14 @@
          handle-ajax-response
          "POST"
          (data-attrs ev)
-         (clj->js {:Content-Type "application/json"}))
-  )
+         (clj->js {:Content-Type "application/json"})))
 
 (defn plus-one-handler [ev]
-  (js/console.log (data-attrs ev))
-  (set-last-event! ev)
   (submit-ajax-request ev))
 
+(defn on-click-plus-button [ev]
+  (plus-one-handler ev))
+
 (defn ^:export init [root-el]
-  (listen! (sel root-el "button") :click plus-one-handler))
+  (ev/listen! (css/sel root-el "button") :click on-click-plus-button)
+  (set-button-text! initial-data))
