@@ -2,7 +2,7 @@
   (:require [domina.css :refer [sel]]
             [domina.events :refer [listen! unlisten!
                                    ]]
-            [goog.net.XhrIo :as xhr]))
+            [goog.net.XhrIo]))
 
 (def last-event (atom nil))
 

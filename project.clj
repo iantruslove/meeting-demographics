@@ -7,11 +7,13 @@
   :source-paths ["src/clj"]
 
   :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.clojure/data.json "0.2.2"]
                  [compojure "1.1.5"]
                  [ring "1.1.8"]
                  [com.cemerick/piggieback "0.0.4"]
                  ;[ring/ring-json "0.2.0"]
                  [ring-middleware-format "0.3.0"]
+                 [ring/ring-json "0.2.0"]
                  [cljsbuild "0.3.2"]
                  ;; CLJS:
                  [cljsbuild "0.3.2"]
