@@ -42,7 +42,15 @@
         <div id="demographics-form">
           <table>
             <tr>
-              <th></th>
+              <th>
+                <div class="view-mode-only">
+                  <button id="edit">☰</button>
+                </div>
+                <div class="edit-mode-only">
+                  <button id="add-row">+⇣</button>
+                  <button id="add-col">+⇢</button>
+                </div>
+              </th>
               <th>male</th>
               <th>female</th>
             </tr>
@@ -61,8 +69,14 @@
                           data-secondary-val="toad">+1 female toad [0]</button></td>
             </tr>
           </table>
-        </div>
-      </div>
+
+          <div id="controls">
+            <button class="not-implemented" id="reset">reset</button>
+            <button class="not-implemented" id="email">email</button>
+            <a class="not-implemented" href="#history">show history</a>
+          </div> <!-- #controls -->
+        </div> <!-- #demographics-form -->
+      </div> <!-- #main -->
       
       <footer></footer>
     </div>
