@@ -1,4 +1,4 @@
-(ns demographics.core
+(ns demographics.app
   (:require [clojure.data.json :as json]
             [compojure.core :refer [defroutes context GET POST]]
             [compojure.handler :as handler]

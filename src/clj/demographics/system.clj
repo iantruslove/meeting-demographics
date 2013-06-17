@@ -1,14 +1,14 @@
 (ns demographics.system
   (:use ring.adapter.jetty)
   (:require demographics.webserver)
-  (:require demographics.core)
+  (:require demographics.app)
   (:require cljs.closure))
 
 ;;TODO: extract the jetty webserver out to a webserver object
 (defn init
   "Returns a new instance of the whole application"
   ([port]
-     (let [app #'demographics.core/app
+     (let [app #'demographics.app/app
            webserver (demographics.webserver/init (Integer. port) app)]
        {:state :initialized
         :webserver webserver}))
