@@ -41,7 +41,7 @@
 (defn submit-ajax-request
   [ev]
   (.send goog.net.XhrIo
-         "/api/meeting"
+         "/api/meeting/0test0"
          handle-ajax-response
          "POST"
          (data-attrs ev)

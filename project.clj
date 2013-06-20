@@ -13,6 +13,8 @@
                  [com.cemerick/piggieback "0.0.4"]
                  [ring-middleware-format "0.3.0"]
                  [ring/ring-json "0.2.0"]
+                 [crypto-random "1.1.0"]
+                 [prismatic/dommy "0.1.1"]
 
                  ;; CLJS:
                  [cljsbuild "0.3.2"]
