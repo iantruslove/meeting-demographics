@@ -2,9 +2,8 @@
   (:require [domina :as dom]
             [domina.css :as css]
             [domina.events :as ev]
-            [goog.net.XhrIo]))
-
-(def last-click-event (atom nil))
+            [clojure.browser.net :as net]
+            [clojure.browser.event :as event]))
 
 (defn bind-new-buttons! [buttons handler]
   (ev/listen! buttons :click handler))
@@ -15,22 +14,16 @@
 (defn nav-to! [url]
   (set! (.-href (.-location js/window)) url))
 
-(def last-response (atom nil))
-
 (defn handle-new-meeting-id [response]
-  (reset! last-response response)
   (let [data (js->clj (.getResponseJson (.-target response)))]
-    (nav-to! (str "http://localhost:8080/" ("meeting-id" data)))
-))
+    (nav-to! (str "http://localhost:8080/" ("meeting-id" data)))))
 
 (defn request-new-meeting-id []
-  (.send goog.net.XhrIo
-         "/api/meeting"
-         handle-new-meeting-id
-         "POST"))
+  (let [xhr (net/xhr-connection.)]
+    (event/listen xhr :success handle-new-meeting-id)
+    (net/transmit xhr "/api/meeting" "POST")))
 
 (defn on-click-new-button [ev]
-  (reset! last-click-event ev)
   (ev/prevent-default ev)
   (request-new-meeting-id))
 
