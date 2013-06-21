@@ -16,8 +16,13 @@
                      "")
         0 n))
 
-(def meeting-attendees (atom {:abc123 {:male {:frog 0 :toad 0}
-                                        :female {:frog 0 :toad 0}}}))
+(def meeting-template {:male {:frog 0 :toad 0}
+                       :female {:frog 0 :toad 0}})
+
+(defn add-new-meeting [meetings meeting-id]
+  (assoc meetings meeting-id meeting-template))
+
+(def meeting-attendees (atom {}))
 
 (defn add-participant [attendees meeting-id gender type]
         (update-in attendees [meeting-id gender type] inc)) 
@@ -40,7 +45,8 @@
 ;; formulate the response
 (defn create-new-meeting [base-uri]
   (let [new-id (gen-chars 6)
-        new-uri (str base-uri "/" new-id)] 
+        new-uri (str base-uri "/" new-id)]
+    (swap! meeting-attendees add-new-meeting (keyword new-id))
     (-> (resp/response {:message "created"
                         :_links {:self {:href  new-uri
                                         :type "application/json"}}
