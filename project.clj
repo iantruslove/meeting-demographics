@@ -25,5 +25,7 @@
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]]}}
 
+  :ring {:handler demographics.app/app}
+
   :plugins [[lein-ring "0.8.5"]]
   )

@@ -4,6 +4,7 @@
             [domina.events :as ev]
             [goog.net.XhrIo :as xhr]))
 
+(def api-href (atom nil))
 (def initial-data {:male {:frog 0 :toad 0}
                    :female {:frog 0 :toad 0}})
 
@@ -41,7 +42,7 @@
 (defn submit-ajax-request
   [ev]
   (.send goog.net.XhrIo
-         "/api/meeting/0test0"
+         @api-href
          handle-ajax-response
          "POST"
          (data-attrs ev)
@@ -54,5 +55,6 @@
   (plus-one-handler ev))
 
 (defn ^:export init [root-el]
+  (reset! api-href (str "/api/meeting" (.-pathname (.-location js/window))))
   (ev/listen! (css/sel root-el "button") :click on-click-plus-button)
   (set-button-text! initial-data))
