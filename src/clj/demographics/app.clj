@@ -57,12 +57,22 @@
   (POST "/meeting" {uri :uri} (create-new-meeting uri))
 )
 
+(defn meeting-exists? [meeting-id]
+  (contains? @meeting-attendees (keyword meeting-id)))
+
+(defn show-meeting-page [meeting-id]
+  (if (meeting-exists? meeting-id) 
+    (resp/resource-response "form.html" {:root "templates"})
+    (-> 
+     (resp/resource-response "no-such-meeting.html" {:root "public"})
+     (resp/status 404))))
+
 (defroutes app-routes
   (context "/api" [] (-> api-routes
                          (wrap-json-response)
                          (wrap-json-body {:keywords? true})))
   (GET "/" [] (resp/resource-response "index.html" {:root "public"}))
-  (GET ["/:id" :id re-meeting-id] [id] (resp/resource-response "form.html" {:root "templates"}))
+  (GET ["/:id" :id re-meeting-id] [id] (show-meeting-page id))
   (resources "/")
   (not-found "<p>404 - page not found</p>\n"))
 
