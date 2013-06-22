@@ -13,7 +13,7 @@
        {:state :initialized
         :webserver webserver}))
   ([]      ;; default "constructor" on port 8080 
-     (init 8080)))
+     (init 8000)))
 
 (defn start-webserver [system]
   (assoc system :webserver 

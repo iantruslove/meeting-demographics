@@ -15,8 +15,13 @@
   (set! (.-href (.-location js/window)) url))
 
 (defn handle-new-meeting-id [response]
-  (let [data (js->clj (.getResponseJson (.-target response)))]
-    (nav-to! (str "http://localhost:8080/" ("meeting-id" data)))))
+  (let [data (js->clj (.getResponseJson (.-target response)))
+        loc (.-location js/window)]
+    (nav-to! (str (.-protocol loc)
+                  "//"
+                  (.-host loc)
+                  "/"
+                  ("meeting-id" data)))))
 
 (defn request-new-meeting-id []
   (let [xhr (net/xhr-connection.)]
