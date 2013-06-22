@@ -1,5 +1,6 @@
 (ns demographics.app
-  (:require [clojure.data.json :as json]
+  (:require [demographics.data-model :as model]
+            [clojure.data.json :as json]
             [compojure.core :refer [defroutes context GET POST]]
             [compojure.handler :as handler]
             [compojure.route :refer [resources not-found]]
@@ -16,37 +17,12 @@
                      "")
         0 n))
 
-(def meeting-template {:male {:frog 0 :toad 0}
-                       :female {:frog 0 :toad 0}})
-
-(defn add-new-meeting [meetings meeting-id]
-  (assoc meetings meeting-id meeting-template))
-
-(def meeting-attendees (atom {}))
-
-(defn add-participant [attendees meeting-id gender type]
-        (update-in attendees [meeting-id gender type] inc)) 
-
-(defn register-participant! [meeting-id gender type]
-  (swap! meeting-attendees add-participant meeting-id gender type)
-  (meeting-id @meeting-attendees))
-
-(defn get-meeting-info
-  "Return the current info on a particular meeting"
-  [id]
-  (resp/response (id @meeting-attendees)))
-
-(defn add-meeting-participant
-  "Adds a participant to a meeting"
-  [meeting-id primary-attr-val secondary-attr-val]
-  (resp/response (register-participant! meeting-id primary-attr-val secondary-attr-val)))
-
 ;; TODO: Split into 2 parts: one to create the meeting, one to
 ;; formulate the response
 (defn create-new-meeting [base-uri]
   (let [new-id (gen-chars 6)
         new-uri (str base-uri "/" new-id)]
-    (swap! meeting-attendees add-new-meeting (keyword new-id))
+    (model/create-new-meeting! (keyword new-id))
     (-> (resp/response {:message "created"
                         :_links {:self {:href  new-uri
                                         :type "application/json"}}
@@ -54,24 +30,27 @@
         (resp/header "Location" new-uri)
         (resp/status 202))))
 
-(defroutes api-routes
-  (GET ["/meeting/:id" :id re-meeting-id] [id] (get-meeting-info (keyword id)))
-  (POST ["/meeting/:id", :id re-meeting-id]
-        {{id :id} :params
-         {primary-val :data-primary-val secondary-val :data-secondary-val} :body}
-        (apply add-meeting-participant (map keyword [id primary-val secondary-val])))
-  (POST "/meeting" {uri :uri} (create-new-meeting uri))
-)
 
-(defn meeting-exists? [meeting-id]
-  (contains? @meeting-attendees (keyword meeting-id)))
+(defn add-meeting-participant
+  "Adds a participant to a meeting"
+  [meeting-id primary-attr-val secondary-attr-val]
+  (resp/response (apply model/register-participant!
+                        (map keyword [meeting-id primary-attr-val secondary-attr-val]))))
 
 (defn show-meeting-page [meeting-id]
-  (if (meeting-exists? meeting-id) 
+  (if (model/meeting-exists? meeting-id) 
     (resp/resource-response "form.html" {:root "templates"})
     (-> 
      (resp/resource-response "no-such-meeting.html" {:root "public"})
      (resp/status 404))))
+
+(defroutes api-routes
+  (GET ["/meeting/:id" :id re-meeting-id] [id] (resp/response (model/get-meeting-info (keyword id))))
+  (POST ["/meeting/:id", :id re-meeting-id]
+        {{id :id} :params
+         {primary-val :data-primary-val secondary-val :data-secondary-val} :body}
+        (add-meeting-participant id primary-val secondary-val))
+  (POST "/meeting" {uri :uri} (create-new-meeting uri)))
 
 (defroutes app-routes
   (context "/api" [] (-> api-routes
