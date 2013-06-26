@@ -7,7 +7,7 @@
 (repl/connect "http://localhost:9000/repl")
 
 (defn ^:export form_init []
-  (form/init (by-id "demographics-form")))
+  (form/init))
 
 (defn ^:export home_init []
   (home/init))

@@ -2,11 +2,11 @@
 
 (def meeting-attendees (atom {}))
 
-(def meeting-template {:male {:frog 0 :toad 0}
-                       :female {:frog 0 :toad 0}})
+(def meeting-template {:male {:frog 0 :fish 0}
+                       :female {:frog 0 :fish 0}})
 
-(defn- add-participant [attendees meeting-id gender type]
-        (update-in attendees [meeting-id gender type] inc)) 
+(defn- add-participant [attendees meeting-id attr1 attr2]
+        (update-in attendees [meeting-id attr1 attr2] inc)) 
 
 (defn- add-new-meeting [meetings meeting-id]
   (assoc meetings meeting-id meeting-template))
@@ -24,10 +24,9 @@
 (defn get-meeting-info
   "Return the current info on a particular meeting"
   [id]
-  (id @meeting-attendees))
+  ((keyword id) @meeting-attendees))
 
 (defn register-participant!
   "Adds a participant to a given meeting"
-  [meeting-id gender type]
-  (swap! meeting-attendees add-participant meeting-id gender type)
-  (get-meeting-info meeting-id))
+  [meeting-id attr1 attr2]
+  (swap! meeting-attendees add-participant meeting-id attr1 attr2))

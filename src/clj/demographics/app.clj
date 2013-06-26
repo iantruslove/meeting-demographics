@@ -34,8 +34,8 @@
 (defn add-meeting-participant
   "Adds a participant to a meeting"
   [meeting-id primary-attr-val secondary-attr-val]
-  (resp/response (apply model/register-participant!
-                        (map keyword [meeting-id primary-attr-val secondary-attr-val]))))
+  (apply model/register-participant!
+         (map keyword [meeting-id primary-attr-val secondary-attr-val])))
 
 (defn show-meeting-page [meeting-id]
   (if (model/meeting-exists? meeting-id) 
@@ -49,7 +49,8 @@
   (POST ["/meeting/:id", :id re-meeting-id]
         {{id :id} :params
          {primary-val :data-primary-val secondary-val :data-secondary-val} :body}
-        (add-meeting-participant id primary-val secondary-val))
+        (add-meeting-participant id primary-val secondary-val)
+        (resp/response (model/get-meeting-info id)))
   (POST "/meeting" {uri :uri} (create-new-meeting uri)))
 
 (defroutes app-routes

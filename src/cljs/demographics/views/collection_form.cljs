@@ -1,7 +1,10 @@
 (ns demographics.views.collection-form
+  (:require-macros [enfocus.macros :as em])
+    
   (:require [domina :as dom]
             [domina.css :as css]
-            [domina.events :as ev]
+            [domina.events :as ev] 
+            [enfocus.core :as ef]
             [goog.net.XhrIo :as xhr]))
 
 (def api-href (atom nil))
@@ -22,8 +25,33 @@
 (defn get-count-from [data gender type]
   (get-in data [gender type]))
 
+(em/deftemplate table-cell :compiled "resources/templates/form_table_cell.html" [primary-attr secondary-attr]
+  [".plus-one"] (em/chain
+                 (em/content (str "+1 " primary-attr " " secondary-attr))
+                 (em/set-attr :data-primary-val primary-attr :data-secondary-val secondary-attr)))
+
+(em/deftemplate table-row :compiled "resources/templates/form_table_row.html" [primary-attrs secondary-attr]
+  ["th"] (em/content secondary-attr)
+  ["td.data"] (em/clone-for [primary-attr primary-attrs]
+                            (em/content (table-cell primary-attr secondary-attr))))
+
+(em/deftemplate table-outline :compiled "resources/templates/form_table_outline.html" [primary-attrs secondary-attrs]
+  ["tr.header > th.column"] (em/clone-for [primary-attr primary-attrs]
+                                   (em/content primary-attr))
+  ["tr.data"] (em/clone-for [secondary-attr secondary-attrs]
+                            (em/content (table-row primary-attrs secondary-attr))))
+
+(defn ^:export create-buttons! [data]
+  (.log js/console (str "Creating buttons: " (pr-str data)))
+  (let [pri-attrs (vec (keys data))
+        sec-attrs (vec (keys ((first pri-attrs) data)))]
+    (.log js/console (str pri-attrs ", " sec-attrs))
+    (em/at js/document
+           ["#demographics-form"] (em/content (table-outline pri-attrs sec-attrs)))))
+
 (defn set-button-text! [data]
-  (doseq [[gender data-per-gender] data]
+  (.log js/console (str "Setting button vals: " (pr-str data)))
+   (doseq [[gender data-per-gender] data]
     (doseq [[type number] data-per-gender]
       (label-button! gender type number))))
 
@@ -35,26 +63,45 @@
       (clj->js)
       (js/JSON.stringify)))
 
-(defn handle-ajax-response [response]
-  (let [data (js->clj (.getResponseJson (.-target response)))]
+(defn get-attendee-data [response]
+  (js->clj (.getResponseJson (.-target response))))
+
+(defn on-plus-one-response [response]
+  (let [data (get-attendee-data response)]
     (set-button-text! data)))
 
-(defn submit-ajax-request
+(defn send-plus-one
   [ev]
+
   (.send goog.net.XhrIo
          @api-href
-         handle-ajax-response
+         on-plus-one-response
          "POST"
          (data-attrs ev)
          (clj->js {:Content-Type "application/json"})))
 
 (defn plus-one-handler [ev]
-  (submit-ajax-request ev))
+  (send-plus-one ev))
 
 (defn on-click-plus-button [ev]
+    (.log js/console "Send!")
   (plus-one-handler ev))
 
-(defn ^:export init [root-el]
+(defn get-data [callback]
+  (.send goog.net.XhrIo
+         @api-href
+         #(callback (get-attendee-data %))
+         "GET"))
+
+(defn register-click-handlers! []
+    (ev/listen! (css/sel "button") :click on-click-plus-button)
+  )
+
+(defn ^:export init []
   (reset! api-href (str "/api/meeting" (.-pathname (.-location js/window))))
-  (ev/listen! (css/sel root-el "button") :click on-click-plus-button)
-  (set-button-text! initial-data))
+  (get-data (fn [data]
+              (create-buttons! data)
+              (set-button-text! data)
+              (register-click-handlers!)))
+;  (set-button-text! initial-data)
+  )

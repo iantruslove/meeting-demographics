@@ -1,5 +1,5 @@
 (defproject demographics "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+`  :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -18,7 +18,8 @@
 
                  ;; CLJS:
                  [cljsbuild "0.3.2"]
-                 [domina "1.0.2-SNAPSHOT"]]
+                 [domina "1.0.2-SNAPSHOT"]
+                 [enfocus "1.0.1"]]
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   
@@ -28,5 +29,12 @@
   :ring {:handler demographics.app/app
          :port 8000}
 
-  :plugins [[lein-ring "0.8.5"]]
+  :plugins [[lein-ring "0.8.5"]
+            [lein-cljsbuild "0.3.2"]]
+
+  :cljsbuild {:builds [ {:source-paths ["src/cljs/demographics"]
+                         :compiler {:optimizations :whitespace
+                                    :pretty-print true
+                                    :output-dir "resources/public/js/files"
+                                    :output-to "resources/public/js/app.js" }}]}
   )
