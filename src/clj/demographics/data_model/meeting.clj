@@ -1,4 +1,4 @@
-(ns dreplemographics.data-model.meeting)
+(ns demographics.data-model.meeting)
 
 (defn init []
   {:col-names [:a]
@@ -24,7 +24,7 @@
     meeting
     (assoc meeting
       :col-names (conj (:col-names meeting) col-name)
-      :rows (map #(conj % 0) (:rows meeting)))))
+      :rows (vec (map #(conj % 0) (:rows meeting))))))
 
 (defn add-row [meeting row-name]
   (if (contains-row? meeting row-name)
@@ -38,23 +38,30 @@
   (vec (concat (subvec v 0 n) (subvec v (inc n))))
   )
 
+(defn- col-index [meeting col-name]
+  (.indexOf (:col-names meeting) col-name))
+
 (defn remove-col [meeting col-name]
-  (let [idx (.indexOf (:col-names meeting) col-name)]
-
-    ;TODO
-
+  (let [idx (col-index meeting col-name)]
+    ; TODO (???) not sure what might remain here...
     (assoc meeting
       :col-names (filterv #(not= % col-name) (:col-names meeting))
-      :rows (map (fn [row] (remove-vec-item row idx)) (:rows meeting))
-      ))
-  )
+      :rows (map (fn [row] (remove-vec-item row idx)) (:rows meeting)))))
+
+(defn- row-index [meeting row-name]
+  (.indexOf (:row-names meeting) row-name))
 
 (defn remove-row [meeting row-name]
-  (let [idx (.indexOf (:row-names meeting) row-name)]
+  (let [idx (row-index meeting row-name)]
     (if (contains? (:rows meeting) idx)
       (assoc meeting
-        :rows (vec (concat (subvec (:rows meeting) 0 idx) (subvec (:rows meeting) (inc idx))))
-        :row-names (filterv #(not= % row-name) (:row-names meeting)))    
+        :row-names (filterv #(not= % row-name) (:row-names meeting))
+        :rows (vec (concat (subvec (:rows meeting) 0 idx) (subvec (:rows meeting) (inc idx)))))    
       meeting)))
 
-(defn increment [meeting col row] meeting)
+(defn increment [meeting col-name row-name]
+  (let [col (col-index meeting col-name)
+        row (row-index meeting row-name)
+        rows (:rows meeting)]
+    (assoc meeting
+      :rows (assoc rows row (assoc (rows row) col (inc ((rows row) col)))))))
