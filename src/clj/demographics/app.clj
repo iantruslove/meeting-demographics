@@ -1,5 +1,5 @@
 (ns demographics.app
-  (:require [demographics.data-model :as model]
+  (:require [demographics.data-model.data-model :as model]
             [clojure.data.json :as json]
             [compojure.core :refer [defroutes context GET POST]]
             [compojure.handler :as handler]
@@ -45,7 +45,8 @@
      (resp/status 404))))
 
 (defroutes api-routes
-  (GET ["/meeting/:id" :id re-meeting-id] [id] (resp/response (model/get-meeting-info (keyword id))))
+  (GET ["/meeting/:id" :id re-meeting-id] [id]
+       (resp/response (model/get-meeting-info (keyword id))))
   (POST ["/meeting/:id", :id re-meeting-id]
         {{id :id} :params
          {primary-val :data-primary-val secondary-val :data-secondary-val} :body}
