@@ -1,6 +1,5 @@
 (ns demographics.app
-  (:require [domina :refer [by-id]]
-            [demographics.views.collection-form :as form]
+  (:require [demographics.views.collection-form :as form]
             [demographics.views.home :as home]
             [clojure.browser.repl :as repl]))
 

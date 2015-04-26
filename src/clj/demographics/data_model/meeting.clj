@@ -1,5 +1,17 @@
 (ns demographics.data-model.meeting)
 
+(defprotocol Meeting
+  (init [] "Creates a freshly minted meeting")
+  (change-col-name [meeting old-name new-name])
+  (change-row-name [meeting old-name new-name])
+  (add-col [meeting col-name])
+  (add-row [meeting row-name])
+  (remove-col [meeting col-name])
+  (remove-row [meeting row-name])
+  (increment [meeting col-name row-name])
+)
+
+
 (defn init []
   {:col-names [:a]
    :row-names [:X]

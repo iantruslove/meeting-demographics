@@ -1,0 +1,23 @@
+[;; contact-schema.edn
+ {:db/id #db/id [:db.part/db]
+  :db/ident :contact/phone
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "phone number for user or venue"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :contact/email
+  :db/index true
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "email address"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :contact/facebook
+  :db/valueType :db.type/string
+  :db/index true
+  :db/cardinality :db.cardinality/one
+  :db/doc "Facebook id for user or venue"
+  :db.install/_attribut :db.part/db}]

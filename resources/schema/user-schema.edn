@@ -1,0 +1,58 @@
+[;; user-schema.edn
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/fid
+  :db/unique :db.unique/value
+  :db/valueType :db.type/string
+  :db/index true
+  :db/cardinality :db.cardinality/one
+  :db/doc "Unique Foursquare id for User"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/fullname
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "User fullname"
+  :db/fulltext true
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/gender
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "user's gender, formatted as foursquare api has"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/homecity
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "user's homecity"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/bio
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "short biography"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/type
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db/doc "type of user on foursquare"
+  :db.install/_attribute :db.part/db}
+
+ ;; user/type enum values
+ [:db/add #db/id [:db.part/user] :db/ident :user.type/user]
+
+ ;; ref to contacts
+ {:db/id #db/id [:db.part/db]
+  :db/ident :user/contact
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/isComponent true
+  :db/doc "user contacts entities"
+  :db.install/_attribute :db.part/db}]
+
